@@ -1,15 +1,24 @@
 ## functions
-calc_total_distance = function(path, cities_coordinate) {
-  dist = vector(mode = 'numeric' , city_size); 
+calc_total_distance = function(path, distmap) {
+  dist = vector(mode = 'numeric' , city_number); 
   total = 0;
   for(i in c(1:city_number-1)){
-    dist[i] = calc_two_city_distance(path[i] , path[i+1] ,cities_coordinate);
+    dist[i] = distmap[path[i] , path[i+1]] ; 
   }
-  dist[city_number] =  calc_two_city_distance( path[city_number],path[1] , cities_coordinate); 
+  dist[city_number] = distmap[path[city_number] , path[1]] ; 
   return(sum(dist))
 }
-
-
+generate_distmap = function(coordinates){
+  point_number = dim(coordinates)[1];
+  distmap = matrix(0 , nrow =  point_number , ncol = point_number);
+  for(i in c(1:point_number))
+    for(j in c(i:point_number))
+    {
+      distmap[i,j] = distmap[j,i] = calc_two_city_distance(i,j , coordinates);
+    }
+  return(distmap)
+  
+}
 calc_two_city_distance = function(city_a , city_b ,cities_coordinate ){
   dist = 0 ; 
   dist = sqrt ( (cities_coordinate[city_a,1] - cities_coordinate[city_b,1])^2 + 
@@ -22,6 +31,8 @@ generate_map = function(city_number,city_size){
   cities_coordinate[,2] = floor(runif(city_number , min = 0 , max = city_size));
   write.csv(cities_coordinate, file = "map.csv");
 }
+
+
 
 # swap the n1-th and n2-th elements in arrray N
 swap = function(N, n1, n2){
@@ -79,7 +90,7 @@ accept = function(opt_len, new_len ,t){
   if(new_len<opt_len){
     return(TRUE);
   }else{
-    if(runif(1, min = 0 , max = 1 ) < exp((new_len- opt_len)/t) ) {
+    if(runif(1, min = 0 , max = 1 ) < exp(-(new_len- opt_len)/t) ) {
       return(TRUE) ;
     }
     

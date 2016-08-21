@@ -4,18 +4,24 @@ graphics.off()
 
 source("./util.R")
 # configuration parameter
-city_number = 20 
+
 city_size = 1000 
 T_min = 1 
 T_init = 100
 r = 0.98
 
 # entry point 
-generate_map(city_number , city_size)
-cities_coordinate = read.csv("map.csv")
+#generate_map(city_number , city_size)
+cities_coordinate = read.csv("nctu.csv" , header = FALSE)
+## roughly transforms transform longitude/latitude 
+cities_coordinate = cities_coordinate * 111000
+
+distmap = generate_distmap(cities_coordinate);
+
+city_number = dim(cities_coordinate)[1]
 
 path <-1:city_number
-len = calc_total_distance(path, cities_coordinate);
+len = calc_total_distance(path, distmap);
 
 opt_len = len;
 opt_path = path;
@@ -27,7 +33,7 @@ while(temperature > T_min){
   
   for(i in c(1:nIter)){
     new_path = generate_new_path(path);
-    new_len = calc_total_distance(new_path,cities_coordinate);
+    new_len = calc_total_distance(new_path,distmap);
     if(accept(len , new_len, temperature)){
       path = new_path;
       len =new_len; 
@@ -37,27 +43,19 @@ while(temperature > T_min){
     {
       opt_path = path;
       opt_len = len; 
-      print(paste("optimal = ", opt_len , sep = " "));
     }
   }
   temperature = temperature * r ;
-  print(paste("temperature = " , temperature , sep = " "));
+  print(paste("temperature = " , temperature , ", optimal = ", opt_len , sep = " "));
 }
-# brutal force
-# opt_len = calc_total_distance(path, cities_coordinate)
-# N = 1000 
-# for(t in c(1:N)){
-#   path = sample(path);
-#   tmp_total = calc_total_distance(path, cities_coordinate);
-#   if(tmp_total < opt_len)
-#     opt_len = tmp_total; 
-# }
 
 # plot result 
+cities_coordinate = cities_coordinate / 111000; 
 X11()
-plot(cities_coordinate[,1] , cities_coordinate[,2], col = 'red' , main = paste("total distance =", opt_len, sep = " "))
-lines(cities_coordinate[opt_path, 1], cities_coordinate[opt_path,2] , col = 'blue')
+plot(cities_coordinate[,2] , cities_coordinate[,1], col = 'red' , main = paste("total distance =", opt_len, sep = " ") , 
+     xlab = "longitude" , ylab = "latitude")
+lines(cities_coordinate[opt_path, 2], cities_coordinate[opt_path,1] , col = 'blue')
 ## connecting first and last cities 
-lines(cities_coordinate[opt_path[c(1,city_number)] ,1 ],cities_coordinate[opt_path[c(1,city_number)] ,2 ], col = 'blue')
+lines(cities_coordinate[opt_path[c(1,city_number)] ,2],cities_coordinate[opt_path[c(1,city_number)] ,1 ], col = 'blue')
 
 
