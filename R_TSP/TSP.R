@@ -31,7 +31,9 @@ temperature = T_init ;
 nIter = city_number *10; 
 loop_count = 1 ; 
 temperature_stat = vector(mode = "numeric" , length = ceiling ((log(T_min) - log(T_init)) / log(r)));
+path_stat = matrix(data = 0 , ncol = 1 + city_number , nrow = ceiling ((log(T_min) - log(T_init)) / log(r)) );
 
+opt_count = 1 ;
 while(temperature > T_min){
   
   for(i in c(1:nIter)){
@@ -46,12 +48,15 @@ while(temperature > T_min){
     {
       opt_path = path;
       opt_len = len; 
+      path_stat[opt_count, 1] = opt_len;
+      path_stat[opt_count, 2 : (city_number +1)] = opt_path;
+      opt_count = opt_count +1 ;
     }
   }
   temperature = temperature * r ;
   print(paste("temperature = " , temperature , ", optimal = ", opt_len , sep = " "));
   temperature_stat[loop_count] = temperature ; 
-  loop_count = loop_count + 1 ; 
+  loop_count = loop_count + 1 ;
 }
 
 # plot result 
@@ -63,5 +68,20 @@ plot(cities_coordinate[,2] , cities_coordinate[,1], col = 'red' , main = paste("
 lines(cities_coordinate[opt_path, 2], cities_coordinate[opt_path,1] , col = 'blue')
 ## connecting first and last cities 
 lines(cities_coordinate[opt_path[c(1,city_number)] ,2],cities_coordinate[opt_path[c(1,city_number)] ,1 ], col = 'blue')
-
 plot(temperature_stat , main = "temperature" , type = 'l')
+
+## output imges 
+par(mfrow = c(1 , 1))
+for (i in c(1 : (opt_count-1))){
+  png(filename = paste("images/", i , ".png" , sep =""));  
+  plot(cities_coordinate[,2] , cities_coordinate[,1], col = 'red' ,
+       main = paste("total distance =", path_stat[i , 1 ], sep = " ") ,
+       xlab = "longitude" , ylab = "latitude");
+      
+  lines(cities_coordinate[path_stat[i, 2:(city_number+1)], 2], cities_coordinate[path_stat[i, 2:(city_number+1)],1] , col = 'blue')
+  ## connecting first and last cities 
+  lines(cities_coordinate[path_stat[i, c(2 , city_number+1)] ,2],cities_coordinate[path_stat[i, c(2 , city_number+1)] ,1], col = 'blue')
+  
+  dev.off()
+  
+}
