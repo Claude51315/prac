@@ -6,8 +6,8 @@
 
 void quick_sort(int *data, int start, int end);
 void print(int *a, int n);
-int a[N]; 
 int main(){
+	int a[N]; 
 	srand(time(NULL));
 	for(int i = 0 ; i < N; i++)
 		a[i] = rand()%(N*10);
