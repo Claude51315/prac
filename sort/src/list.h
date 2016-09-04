@@ -14,8 +14,9 @@ typedef struct _list{
 node_t* new_node(int val, node_t* next);
 list_t* init_list();
 list_t* insert(list_t *the_list, int value);
+node_t* list_get(list_t *the_list, int index);
 void print(list_t *the_list);
 /* list sorting */
 list_t* bubble_sort(list_t *the_list);
-void swap(node_t *a, node_t *b);
+void swap(list_t *the_list, node_t *a, node_t *b);
 #endif
