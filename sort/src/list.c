@@ -56,23 +56,22 @@ node_t* list_get(list_t *the_list, int index)
 }
 list_t* bubble_sort(list_t *the_list)
 {
-	node_t *next;
+	node_t *next, *tmp, *tmp2;
 	node_t *elem;
 	elem = the_list->head ; 
 	while(elem->next != NULL)
 	{
-        next = elem->next;
-        while(next->next != NULL){
+        next = elem->next; 
+        while(next->next!=NULL)
+        {
             if(elem->next->value > next->next->value)
-            {
                 swap(the_list, elem->next, next->next);
-                print(the_list);
-            }
-            next = next->next;
+            next = next->next; 
+            if(next == NULL)
+                break; 
         }
-
 	    elem = elem->next;
-	}
+    }
 	return the_list; 
 }
 void swap(list_t *the_list, node_t *a, node_t *b)
