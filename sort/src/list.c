@@ -22,9 +22,8 @@ list_t* init_list()
 }
 list_t* insert(list_t *the_list, int value)
 {
-    
+    node_t *prev;
     node_t *elem = the_list->head ; 
-	node_t *prev; 
 	if(elem->next == NULL)
 	{
 		elem->next = new_node(value, NULL); 
@@ -56,7 +55,7 @@ node_t* list_get(list_t *the_list, int index)
 }
 list_t* bubble_sort(list_t *the_list)
 {
-	node_t *next, *tmp, *tmp2;
+	node_t *next;
 	node_t *elem;
 	elem = the_list->head ; 
 	while(elem->next != NULL)
