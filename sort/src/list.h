@@ -13,10 +13,15 @@ typedef struct _list{
 /* list operation*/
 node_t* new_node(int val, node_t* next);
 list_t* init_list();
-list_t* insert(list_t *the_list, int value);
+void free_list(list_t *the_list);
+list_t* list_insert(list_t *the_list, int value);
 node_t* list_get(list_t *the_list, int index);
+void swap(list_t *the_list, node_t *a, node_t *b);
+int list_length(list_t *the_list);
 void print(list_t *the_list);
 /* list sorting */
 list_t* bubble_sort(list_t *the_list);
-void swap(list_t *the_list, node_t *a, node_t *b);
+list_t* quick_sort(list_t *the_list);
+list_t* merge_sort(list_t *the_list);
+list_t* merge(list_t *the_list1, list_t *the_list2);
 #endif
