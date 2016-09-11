@@ -9,6 +9,7 @@ typedef struct _node{
 }node_t;
 typedef struct _list{
 	node_t *head;
+    int length;
 }list_t;
 /* list operation*/
 node_t* new_node(int val, node_t* next);
@@ -21,7 +22,8 @@ int list_length(list_t *the_list);
 void print(list_t *the_list);
 /* list sorting */
 list_t* bubble_sort(list_t *the_list);
-list_t* quick_sort(list_t *the_list);
+list_t* quick_sort(list_t *the_list, int start, int end);
+
 list_t* merge_sort(list_t *the_list);
 list_t* merge(list_t *the_list1, list_t *the_list2);
 #endif

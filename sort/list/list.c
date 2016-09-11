@@ -1,24 +1,26 @@
 #include "list.h"
 node_t* new_node(int val, node_t* next)
 {
-	node_t *p = (node_t*)malloc(sizeof(node_t));
-	if(p == NULL){
-		printf("memory allocation error\n");
-		exit(1);
-	}
-	p->value = val ; 
-	p->next = next;
-	return p; 
+    node_t *p = (node_t*)malloc(sizeof(node_t));
+    if(p == NULL){
+        printf("memory allocation error\n");
+        exit(1);
+    }
+    p->value = val ; 
+    p->next = next;
+    return p; 
 }
 list_t* init_list()
 {
-	list_t *p =(list_t*) malloc(sizeof(list_t));
-	if(p == NULL){
-		printf("memory allocation error\n");
-		exit(1);
-	}
-	p->head = new_node(0, NULL); 
-	return p; 
+    list_t *p =(list_t*) malloc(sizeof(list_t));
+    
+    if(p == NULL){
+        printf("memory allocation error\n");
+        exit(1);
+    }
+    p->head = new_node(0, NULL); 
+    p->length = 0 ;
+    return p; 
 }
 void free_list(list_t *the_list)
 {
@@ -36,21 +38,21 @@ void free_list(list_t *the_list)
 list_t* list_insert(list_t *the_list, int value)
 {
     node_t *prev;
-    node_t *elem = the_list->head ; 
-	if(elem->next == NULL)
-	{
-		elem->next = new_node(value, NULL); 
-		return the_list; 
-	}
-	prev = elem ; 
-	while( elem->next != NULL)
-	{
-		prev = elem ; 
-		elem = elem->next ; 
-	}
-	elem->next = new_node(value, NULL); 
-
-	return the_list; 
+    node_t *elem = the_list->head;
+    the_list->length ++;
+    if(elem->next == NULL)
+    {
+        elem->next = new_node(value, NULL); 
+        return the_list; 
+    }
+    prev = elem ; 
+    while( elem->next != NULL)
+    {
+        prev = elem ; 
+        elem = elem->next ; 
+    }
+    elem->next = new_node(value, NULL); 
+    return the_list; 
 }
 node_t* list_get(list_t *the_list, int index)
 {
@@ -68,6 +70,7 @@ node_t* list_get(list_t *the_list, int index)
 }
 int list_length(list_t *the_list)
 {
+    /*
     node_t *elem = the_list->head;
     int length = 0;
     while(elem->next != NULL)
@@ -75,15 +78,16 @@ int list_length(list_t *the_list)
         length++;
         elem = elem->next; 
     }
-    return length;
+    */
+    return the_list->length ;
 }
 list_t* bubble_sort(list_t *the_list)
 {
-	node_t *next;
-	node_t *elem;
-	elem = the_list->head ; 
-	while(elem->next != NULL)
-	{
+    node_t *next;
+    node_t *elem;
+    elem = the_list->head ; 
+    while(elem->next != NULL)
+    {
         next = elem->next; 
         while(next->next!=NULL)
         {
@@ -93,9 +97,9 @@ list_t* bubble_sort(list_t *the_list)
             if(next == NULL)
                 break; 
         }
-	    elem = elem->next;
+        elem = elem->next;
     }
-	return the_list; 
+    return the_list; 
 }
 void swap(list_t *the_list, node_t *a, node_t *b)
 {
@@ -129,8 +133,34 @@ void swap(list_t *the_list, node_t *a, node_t *b)
     else
         b->next = a ; 
 }
-list_t* quick_sort(list_t *the_list)
+list_t* quick_sort(list_t *the_list, int start, int end)
 {
+    if(start > end)
+        return the_list; 
+    node_t *pivot, *left = NULL, *end_elem; 
+    node_t *elem;
+    int length = 0;
+    pivot = list_get(the_list, start);
+    end_elem = list_get(the_list, end);
+    elem = pivot;
+    while(elem->next != end_elem->next && elem->next != NULL)
+    {
+        if(elem->next->value < pivot->value){
+            if(left == NULL){
+                swap(the_list, pivot->next, elem->next);
+                left = pivot->next;
+            }else{
+                swap(the_list, left->next, elem->next);
+                left = left->next;
+            }
+            length++;
+        }
+        elem = elem->next;
+    }
+    swap(the_list, pivot, left);
+    quick_sort(the_list, start, start+length-1);
+    quick_sort(the_list, start+length+1, end);
+    //printf("length = %d\n", length);
     return the_list;
 }
 list_t* merge_sort(list_t *the_list)
@@ -192,11 +222,11 @@ list_t* merge(list_t *the_list1, list_t *the_list2)
 }
 void print(list_t *the_list)
 {
-	node_t *elem = the_list->head; 
-	while(elem->next!=NULL)
-	{
-		printf("%d ", elem->next->value);
-		elem = elem->next; 
-	}
+    node_t *elem = the_list->head; 
+    while(elem->next!=NULL)
+    {
+        printf("%d ", elem->next->value);
+        elem = elem->next; 
+    }
     printf("\n");
 }
