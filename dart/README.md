@@ -26,5 +26,13 @@ $ dpkg -L dart
 # set up env variable PATH
 $ export PATH=${PATH}:/usr/lib/dart/bin
 # or add the above command to ~/.profile to modify PATH variable permenantly
+```
 
+# Run an Application
+
+```
+# resolving dependencies from pubspec.yaml
+$ pub get
+# run the app. on localhost:8080
+$ pub serve
 ```
