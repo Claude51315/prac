@@ -1,0 +1,4 @@
+#dart unnecessary files
+*.lock
+packages/
+
