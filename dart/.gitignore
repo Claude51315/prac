@@ -1,5 +1,6 @@
 #dart unnecessary files
 *.lock
 packages/
+packages
 .packages
 .pub/
