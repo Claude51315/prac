@@ -1,18 +1,8 @@
+import 'dart:async';
 import 'package:angular2/core.dart';
 import 'hero.dart';
 import 'hero_detail_component.dart';
-final List<Hero> mockHeroes = [
-    new Hero(11, 'claude1'),
-    new Hero(12, 'claude2'),
-    new Hero(13, 'claude3'),
-    new Hero(14, 'claude4'),
-    new Hero(15, 'claude5'),
-    new Hero(16, 'claude6'),
-    new Hero(17, 'claude7'),
-    new Hero(18, 'claude8'),
-    new Hero(19, 'claude9'),
-    new Hero(20, 'claude0')
-];
+import 'hero_service.dart';
 @Component(
     selector: 'my-app',
     template: '''
@@ -77,14 +67,23 @@ final List<Hero> mockHeroes = [
         }
     '''
     ],
-    directives: const [HeroDetailComponent]
+    directives: const [HeroDetailComponent],
+    providers: const [HeroService]
 )
 
-class AppComponent {
+class AppComponent implements OnInit {
     String title = 'Tour of Heros';
-    final List<Hero> heroes = mockHeroes;
+    List<Hero> heroes ;
     Hero selectedHero;
-
+    final HeroService _heroService;
+    AppComponent(this._heroService);
+    
+    Future<NULL> getHeroes() async{
+        heroes = await _heroService.getHeroes();
+    }
+    void ngOnInit(){
+        getHeroes();
+    }
     onSelect(Hero hero){
         selectedHero = hero;
     }
