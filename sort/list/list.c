@@ -163,7 +163,7 @@ list_t* quick_sort(list_t *the_list, int start, int end)
     //printf("length = %d\n", length);
     return the_list;
 }
-list_t* merge_sort(list_t *the_list)
+list_t* merge_sort(list_t *the_list, int mode )
 {
     list_t *left, *right, *merged; 
     node_t *elem;
@@ -184,9 +184,18 @@ list_t* merge_sort(list_t *the_list)
             list_insert(right, elem->value);
         }
     }
-    left = merge_sort(left);
-    right = merge_sort(right);
-    merged = merge(left, right);
+    printf("left:\n");
+    print(NULL, left);
+    printf("right:\n");
+    print(NULL, right);
+
+    left = merge_sort(left, mode);
+    right = merge_sort(right, mode );
+    if(mode == 0){
+        merged = merge(left, right);
+    } else if (mode == 1){
+        merged = merge_inplace(left, right);
+    }
     free_list(left);
     free_list(right);
     return merged;
@@ -220,13 +229,58 @@ list_t* merge(list_t *the_list1, list_t *the_list2)
     }
     return new_list;
 }
-void print(list_t *the_list)
+list_t* merge_inplace(list_t *the_list1, list_t *the_list2)
 {
+    list_t *new_list = init_list();
+    node_t *elem1, *elem2, *elem_new;
+    elem_new = new_list->head; 
+    elem1 = the_list1->head;
+    elem2 = the_list2->head;
+    while(elem1->next != NULL && elem2->next !=NULL)
+    {
+        if(elem1->next->value < elem2->next->value){
+            elem_new -> next = elem1->next;
+            //list_insert(new_list, elem1->next->value);
+            elem_new = elem_new->next; 
+            elem1 = elem1->next;
+        }else{
+            elem_new -> next = elem2->next;
+            //list_insert(new_list, elem2->next->value);
+            elem_new = elem_new->next;
+            elem2 = elem2->next;
+        }
+    }
+    if(elem1->next!=NULL)
+    {
+        //list_insert(new_list, elem1->next->value);
+        //elem1 = elem1->next;
+        elem_new->next = elem1->next;
+    }
+    if(elem2->next!=NULL)
+    {
+        //list_insert(new_list, elem2->next->value);
+        //elem2 = elem2->next;
+        elem_new->next = elem2->next;
+    }
+    new_list -> length = the_list1->length + the_list2->length;
+    the_list1->head->next = NULL; 
+    the_list2->head->next = NULL;
+    print(NULL, new_list);
+    return new_list;
+}
+void print(char* filename, list_t *the_list)
+{
+    FILE *p = NULL;
+    if(filename != NULL)
+        p = fopen(filename, "w");
     node_t *elem = the_list->head; 
     while(elem->next!=NULL)
     {
-        printf("%d ", elem->next->value);
+        if(p != NULL)
+            fprintf(p,"%d\n", elem->next->value);
+        else
+            printf("%d\n", elem->next->value);
         elem = elem->next; 
     }
-    printf("\n");
+    fclose(p);
 }
