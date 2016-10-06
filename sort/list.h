@@ -3,14 +3,14 @@
 #include<stdio.h>
 #include<stdlib.h>
 /* list struct*/
-typedef struct _node{
-	int value;
-	struct _node *next;
-}node_t;
-typedef struct _list{
-	node_t *head;
+typedef struct _node {
+    int value;
+    struct _node *next;
+} node_t;
+typedef struct _list {
+    node_t *head;
     int length;
-}list_t;
+} list_t;
 /* list operation*/
 node_t* new_node(int val, node_t* next);
 list_t* init_list();

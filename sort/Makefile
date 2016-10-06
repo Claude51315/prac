@@ -2,24 +2,38 @@ CC=gcc
 CFLAG += -std=gnu99
 CFLAG += -Wall
 CFLAG += -g
-all: merge_sort bubble_sort quick_sort
 
-bubble_sort: list/bubble_sort.c list/list.h list/list.c
-	$(CC) $(CFLAG) list/bubble_sort.c list/list.h list/list.c -o bubble_sort
+EXECUTABLES= bubble_sort_array\
+			 bubble_sort_list \
+			 merge_sort_array \
+			 merge_sort_list \
+			 quick_sort_array \
+			 quick_sort_list \
+			 genNumber
 
-merge_sort: main.c list/list.h list/list.c 
-	$(CC) $(CFLAG) main.c -I list/ list/list.c list/time_measure.c -o merge_sort
+COMMON= main.c time_measure.h time_measure.c
+LIST_COMMON= list.h list.c
+ARRAY_COMMON= array.h array.c
 
-quick_sort: list/quick_sort.c list/list.h list/list.c
-	$(CC) $(CFLAG) list/quick_sort.c list/list.h list/list.c -o quick_sort
+all: ${EXECUTABLES}
 
+bubble_sort_array: ${COMMON} ${ARRAY_COMMON}
+	$(CC) $(CFLAG) -DARRAY -DBUBBLE array.c time_measure.c main.c -o $@
+bubble_sort_list: ${COMMON} ${LIST_COMMOM}
+	$(CC) $(CFLAG) -DLIST -DBUBBLE list.c time_measure.c main.c -o $@
+
+merge_sort_array: ${COMMON} ${ARRAY_COMMON}
+	$(CC) $(CFLAG) -DARRAY -DMERGE array.c time_measure.c main.c -o $@
+merge_sort_list: ${COMMON} ${LIST_COMMON}
+	$(CC) $(CFLAG) -DLIST -DMERGE list.c time_measure.c main.c -o $@
+
+quick_sort_array: ${COMMON} ${ARRAY_COMMON}
+	$(CC) $(CFLAG) -DARRAY -DQUICK array.c time_measure.c main.c -o $@
+quick_sort_list: ${COMMON} ${LIST_COMMON}
+	$(CC) $(CFLAG) -DLIST -DQUICK list.c time_measure.c main.c -o $@
 genNumber: genNumber.c
 	${CC} ${CFLAG} $@.c -o $@
-
-perf:
-	sudo perf stat --repeat 10 -e cycles ./bubble_sort
-	sudo perf stat --repeat 10 -e cycles ./merge_sort
-	sudo perf stat --repeat 10 -e cycles ./quick_sort
+	./$@
 
 .PHONY: clean run test astyle
 
@@ -30,7 +44,4 @@ test: genNumber merge_sort
 	./merge_sort
 
 clean:
-	-rm bubble_sort
-	-rm merge_sort
-	-rm quick_sort
-	-rm genNumber *.txt
+	-rm ${EXECUTABLES} *.txt
