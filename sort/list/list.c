@@ -165,7 +165,7 @@ list_t* quick_sort(list_t *the_list, int start, int end)
 }
 list_t* merge_sort(list_t *the_list, int mode )
 {
-    list_t *left, *right, *merged; 
+    list_t *left, *right, *merged, *left_tmp, *right_tmp; 
     node_t *elem;
     int length, i; 
     length = list_length(the_list);
@@ -184,22 +184,23 @@ list_t* merge_sort(list_t *the_list, int mode )
             list_insert(right, elem->value);
         }
     }
+    left_tmp = merge_sort(left, mode);
     printf("left:\n");
-    print(NULL, left);
+    print(NULL, left_tmp);
+    right_tmp = merge_sort(right, mode );
     printf("right:\n");
-    print(NULL, right);
+    print(NULL, right_tmp);
 
-    left = merge_sort(left, mode);
-    right = merge_sort(right, mode );
+
     if(mode == 0){
-        merged = merge(left, right);
+        merged = merge(left_tmp, right_tmp);
     } else if (mode == 1){
-        merged = merge_inplace(left, right);
+        merged = merge_inplace(left_tmp, right_tmp);
     }
     printf("merged:\n");
     print(NULL, merged);
-    free_list(left);
-    free_list(right);
+    free_list(left_tmp);
+    free_list(right_tmp);
     return merged;
 }
 list_t* merge(list_t *the_list1, list_t *the_list2)
@@ -211,6 +212,7 @@ list_t* merge(list_t *the_list1, list_t *the_list2)
     elem2 = the_list2->head;
     while(elem1->next != NULL && elem2->next !=NULL)
     {
+        printf("test\n");
         if(elem1->next->value < elem2->next->value){
             list_insert(new_list, elem1->next->value);
             elem1 = elem1->next;
@@ -236,33 +238,30 @@ list_t* merge_inplace(list_t *the_list1, list_t *the_list2)
     list_t *new_list = init_list();
     node_t *elem1, *elem2, *elem_new;
     elem_new = new_list->head; 
-    elem1 = the_list1->head;
-    elem2 = the_list2->head;
-    while(elem1->next != NULL && elem2->next !=NULL)
+    // avoid circular pointing
+    elem1 = the_list1->head->next;
+    elem2 = the_list2->head->next;
+    while(elem1 != NULL && elem2 !=NULL)
     {
-        if(elem1->next->value < elem2->next->value){
-            elem_new -> next = elem1->next;
-            //list_insert(new_list, elem1->next->value);
+        printf("elem1 ->value = %d\n", elem1->value);
+        printf("elem2 ->value = %d\n", elem2->value);
+        if(elem1->value < elem2->value){
+            elem_new -> next = elem1;
             elem_new = elem_new->next; 
             elem1 = elem1->next;
         }else{
-            elem_new -> next = elem2->next;
-            //list_insert(new_list, elem2->next->value);
+            elem_new -> next = elem2;
             elem_new = elem_new->next;
             elem2 = elem2->next;
         }
     }
-    if(elem1->next!=NULL)
+    if(elem1!=NULL)
     {
-        //list_insert(new_list, elem1->next->value);
-        //elem1 = elem1->next;
-        elem_new->next = elem1->next;
+        elem_new->next = elem1;
     }
-    if(elem2->next!=NULL)
+    if(elem2!=NULL)
     {
-        //list_insert(new_list, elem2->next->value);
-        //elem2 = elem2->next;
-        elem_new->next = elem2->next;
+        elem_new->next = elem2;
     }
     new_list -> length = the_list1->length + the_list2->length;
     the_list1->head->next = NULL; 

@@ -2,18 +2,17 @@
 #include "time_measure.h"
 int main(void)
 {
-    struct timespec start, end; 
+    struct timespec start, end;
 
     list_t *the_list,*merge_list;
     the_list = init_list();
     int i, tmp ;
-    double duration; 
+    double duration;
     FILE *p = fopen("random_number.txt", "r");
-    while(1)
-    {
+    while(1) {
         fscanf(p, "%d", &tmp);
         if(feof(p))
-            break; 
+            break;
         list_insert(the_list, tmp);
     }
     fclose(p);
@@ -25,6 +24,6 @@ int main(void)
     duration = diff_in_second(start, end);
     printf("duration = %lf\n", duration);
     print("sorted_number.txt", merge_list);
-    
+
     return 0 ;
 }

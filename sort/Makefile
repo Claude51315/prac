@@ -21,7 +21,13 @@ perf:
 	sudo perf stat --repeat 10 -e cycles ./merge_sort
 	sudo perf stat --repeat 10 -e cycles ./quick_sort
 
-.PHONY: clean run
+.PHONY: clean run test astyle
+
+astyle:
+	astyle --style=kr --indent=spaces=4 --indent-switches --suffix=none *.c *.h
+test: genNumber merge_sort
+	./genNumber
+	./merge_sort
 
 clean:
 	-rm bubble_sort
