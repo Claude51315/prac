@@ -196,6 +196,8 @@ list_t* merge_sort(list_t *the_list, int mode )
     } else if (mode == 1){
         merged = merge_inplace(left, right);
     }
+    printf("merged:\n");
+    print(NULL, merged);
     free_list(left);
     free_list(right);
     return merged;
@@ -265,7 +267,6 @@ list_t* merge_inplace(list_t *the_list1, list_t *the_list2)
     new_list -> length = the_list1->length + the_list2->length;
     the_list1->head->next = NULL; 
     the_list2->head->next = NULL;
-    print(NULL, new_list);
     return new_list;
 }
 void print(char* filename, list_t *the_list)
@@ -282,5 +283,6 @@ void print(char* filename, list_t *the_list)
             printf("%d\n", elem->next->value);
         elem = elem->next; 
     }
-    fclose(p);
+    if(filename != NULL)
+        fclose(p);
 }

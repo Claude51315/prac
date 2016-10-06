@@ -20,7 +20,7 @@ int main(void)
     printf("complete read file\n");
     print("test.txt", the_list);
     clock_gettime(CLOCK_ID, &start);
-    merge_list = merge_sort(the_list, 0);
+    merge_list = merge_sort(the_list, 1);
     clock_gettime(CLOCK_ID, &end);
     duration = diff_in_second(start, end);
     printf("duration = %lf\n", duration);
