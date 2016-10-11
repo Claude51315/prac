@@ -3,6 +3,8 @@ CFLAG += -std=gnu99
 CFLAG += -Wall
 CFLAG += -g
 
+N = 1000
+
 EXECUTABLES= bubble_sort_array\
 			 bubble_sort_list \
 			 merge_sort_array \
@@ -33,15 +35,21 @@ quick_sort_list: ${COMMON} ${LIST_COMMON}
 	$(CC) $(CFLAG) -DLIST -DQUICK list.c time_measure.c main.c -o $@
 genNumber: genNumber.c
 	${CC} ${CFLAG} $@.c -o $@
-	./$@
+	./$@ ${N}
 
-.PHONY: clean run test astyle
+.PHONY: clean run astyle
+
+run: genNumber ${EXECUTABLES}
+	for i in `seq 1000 1000 10000`; do \
+	./genNumber $$i; \
+	./bubble_sort_array $$i; \
+	./quick_sort_list $$i; \
+	./quick_sort_array $$i; \
+	./merge_sort_list $$i; \
+	./merge_sort_array $$i; \
+	done
 
 astyle:
 	astyle --style=kr --indent=spaces=4 --indent-switches --suffix=none *.c *.h
-test: genNumber merge_sort
-	./genNumber
-	./merge_sort
-
 clean:
 	-rm ${EXECUTABLES} *.txt

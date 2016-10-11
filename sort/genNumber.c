@@ -1,11 +1,10 @@
 #include<time.h>
 #include<stdlib.h>
 #include<stdio.h>
-#define N 100
-int main()
+int main(int argc, char *argv[])
 {
 
-
+    int N  = atoi(argv[1]);
     int i , tmp;
     srand(time(NULL));
     FILE* p = fopen("random_number.txt", "w");

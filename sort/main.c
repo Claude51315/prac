@@ -4,15 +4,19 @@
 #include "array.h"
 #endif
 #include "time_measure.h"
-int main(void)
+#include<string.h>
+int main(int argc, char *argv[])
 {
     struct timespec start, end;
     double duration = 0;
+    int n = atoi(argv[1]);
+    char filename[15];
+    FILE *p;
 #ifdef LIST
     list_t *the_list,*sorted_list;
     the_list = init_list();
     int tmp ;
-    FILE *p = fopen("random_number.txt", "r");
+    p = fopen("random_number.txt", "r");
     while(1) {
         fscanf(p, "%d", &tmp);
         if(feof(p))
@@ -35,11 +39,9 @@ int main(void)
 
 #ifdef ARRAY
     int *data;
-    int n = 50;
     data = malloc(n * sizeof(int));
-
     int tmp , i = 0;
-    FILE *p = fopen("random_number.txt", "r");
+    p = fopen("random_number.txt", "r");
     while(1) {
         fscanf(p, "%d", &tmp);
         if(feof(p))
@@ -61,5 +63,27 @@ int main(void)
 #endif
     duration = diff_in_second(start, end);
     printf("duration = %lf\n", duration);
+
+/* output execution time*/
+#ifdef LIST
+    #ifdef BUBBLE
+        strcpy(filename, "BUBBLE_LIST");
+    #elif MERGE
+        strcpy(filename, "MERGE_LIST");
+    #else
+        strcpy(filename, "QUICK_LIST");
+    #endif
+#else
+    #ifdef BUBBLE
+        strcpy(filename, "BUBBLE_ARRAY");
+    #elif MERGE
+        strcpy(filename, "MERGE_ARRAY");
+    #else
+        strcpy(filename, "QUICK_ARRAY");
+    #endif
+#endif
+    p = fopen("execution_time.txt", "a");
+    fprintf(p,"%s,%d,%lf\n", filename, n, duration);
+    fclose(p);
     return 0 ;
 }
