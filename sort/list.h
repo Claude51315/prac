@@ -26,6 +26,6 @@ void print(char* filename, list_t *the_list);
 list_t* bubble_sort(list_t *the_list);
 list_t* quick_sort(list_t *the_list, int start, int end);
 
-list_t* merge_sort(list_t *the_list, int mode);
+list_t* merge_sort(list_t *the_list);
 list_t* merge_list(list_t *the_list1, list_t *the_list2);
 #endif

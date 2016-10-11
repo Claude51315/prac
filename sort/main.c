@@ -17,20 +17,20 @@ int main(void)
         fscanf(p, "%d", &tmp);
         if(feof(p))
             break;
-        list_insert(the_list, tmp);
+        the_list = list_insert(the_list, tmp);
     }
     fclose(p);
     clock_gettime(CLOCK_ID, &start);
 #ifdef BUBBLE
     sorted_list = bubble_sort(the_list);
 #elif MERGE
-    sorted_list = merge_sort(the_list, 1);
+    sorted_list = merge_sort(the_list);
 #else
     sorted_list = quick_sort(the_list, 0, the_list->length -1);
 #endif
     clock_gettime(CLOCK_ID, &end);
     print("sorted_number.txt", sorted_list);
-    free_list(the_list);
+    free_list(sorted_list);
 #endif
 
 #ifdef ARRAY
