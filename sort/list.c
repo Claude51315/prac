@@ -103,6 +103,16 @@ void swap(list_t *the_list, node_t *a, node_t *b)
     /* a or b is not in the list */
     if(count < 2 )
         return;
+    /*
+    elem = a_prev->next; 
+    a_prev->next = b_prev->next;
+    b_prev->next = elem;
+
+    elem = a ->next ; 
+    a->next = b->next;
+    b->next = elem;
+    */
+
     /* consider whether a and b are adjacent*/
     if(a_prev != b) {
         if(a_prev == NULL)
@@ -110,6 +120,9 @@ void swap(list_t *the_list, node_t *a, node_t *b)
         else
             a_prev->next = b ;
     }
+    
+    
+    
     if(b_prev != a) {
         if(b_prev == NULL)
             the_list->head = a;
@@ -128,25 +141,37 @@ void swap(list_t *the_list, node_t *a, node_t *b)
 }
 list_t* quick_sort(list_t *the_list, int start, int end)
 {
-    if(start > end)
+    /*
+    printf("start\n");
+    print(NULL, the_list);
+    printf("start = %d\n", start);
+    printf("end = %d\n", end);
+    printf("-----\n");
+    */
+    if(start >= end)
         return the_list;
     node_t *pivot, *left = NULL;
-    node_t *elem;
+    node_t *elem, *end_elem, *tmp;
     int length = 0;
     pivot = list_index(the_list, start);
-    elem = pivot;
-    while(elem->next != NULL) {
-        if(elem->next->value < pivot->value) {
+    end_elem = list_index(the_list, end);
+    elem = pivot->next;
+    while(elem != end_elem->next && elem != NULL) {
+        if(elem->value <= pivot->value) {
             if(left == NULL) {
-                swap(the_list, pivot->next, elem->next);
-                left = pivot->next;
+                left = elem;
+                elem = elem->next;
+                swap(the_list, pivot->next, left);
             } else {
-                swap(the_list, left->next, elem->next);
+                tmp = elem;
+                elem = elem->next;
+                swap(the_list, left->next, tmp);
                 left = left->next;
             }
             length++;
+        }else{
+            elem = elem->next;
         }
-        elem = elem->next;
     }
     swap(the_list, pivot, left);
     quick_sort(the_list, start, start+length-1);
