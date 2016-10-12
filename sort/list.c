@@ -18,7 +18,7 @@ list_t* init_list()
         printf("memory allocation error\n");
         exit(1);
     }
-    p->head = NULL;
+    p->head = new_node(0, NULL);;
     p->length = 0 ;
     return p;
 }
@@ -38,8 +38,9 @@ list_t* list_insert(list_t *the_list, int value)
 {
     node_t *e = new_node(value, NULL);
     the_list->length ++;
-    e->next = the_list->head;
-    the_list->head = e;
+    e->next = the_list->head->next;
+    the_list->head->next = e;
+    //the_list->head = e;
     return the_list;
 }
 node_t* list_index(list_t *the_list, int index)
@@ -230,11 +231,11 @@ void print(char* filename, list_t *the_list)
     if(filename != NULL)
         p = fopen(filename, "w");
     node_t *elem = the_list->head;
-    while(elem!=NULL) {
+    while(elem->next!=NULL) {
         if(p != NULL)
-            fprintf(p,"%d\n", elem->value);
+            fprintf(p,"%d\n", elem->next->value);
         else
-            printf("%d\n", elem->value);
+            printf("%d\n", elem->next->value);
         elem = elem->next;
     }
     if(filename != NULL)

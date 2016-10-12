@@ -48,7 +48,8 @@ run: genNumber ${EXECUTABLES}
 	./merge_sort_list $$i; \
 	./merge_sort_array $$i; \
 	done
-
+test_list: test_list.c list.h list.c
+	${CC} ${CFLAG} $@.c list.c -o $@
 astyle:
 	astyle --style=kr --indent=spaces=4 --indent-switches --suffix=none *.c *.h
 clean:
