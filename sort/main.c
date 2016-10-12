@@ -64,23 +64,23 @@ int main(int argc, char *argv[])
     duration = diff_in_second(start, end);
     printf("duration = %lf\n", duration);
 
-/* output execution time*/
+    /* output execution time*/
 #ifdef LIST
-    #ifdef BUBBLE
-        strcpy(filename, "BUBBLE_LIST");
-    #elif MERGE
-        strcpy(filename, "MERGE_LIST");
-    #else
-        strcpy(filename, "QUICK_LIST");
-    #endif
+#ifdef BUBBLE
+    strcpy(filename, "BUBBLE_LIST");
+#elif MERGE
+    strcpy(filename, "MERGE_LIST");
 #else
-    #ifdef BUBBLE
-        strcpy(filename, "BUBBLE_ARRAY");
-    #elif MERGE
-        strcpy(filename, "MERGE_ARRAY");
-    #else
-        strcpy(filename, "QUICK_ARRAY");
-    #endif
+    strcpy(filename, "QUICK_LIST");
+#endif
+#else
+#ifdef BUBBLE
+    strcpy(filename, "BUBBLE_ARRAY");
+#elif MERGE
+    strcpy(filename, "MERGE_ARRAY");
+#else
+    strcpy(filename, "QUICK_ARRAY");
+#endif
 #endif
     p = fopen("execution_time.txt", "a");
     fprintf(p,"%s,%d,%lf\n", filename, n, duration);
