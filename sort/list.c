@@ -49,7 +49,7 @@ node_t* list_index(list_t *the_list, int index)
         return NULL;
     node_t *elem = the_list->head;
     int i ;
-    for(i = 0; i < index; i++) {
+    for(i = 0; i <= index; i++) {
         elem = elem->next ;
         if(elem == NULL)
             return NULL;
@@ -62,49 +62,51 @@ int list_length(list_t *the_list)
 }
 list_t* bubble_sort(list_t *the_list)
 {
-    node_t *next, *tmp;
+    node_t *next;
     node_t *elem;
     elem = the_list->head ;
-    while(elem!= NULL) {
+    while(elem->next != NULL){
         next = elem->next;
-        while(next!=NULL) {
-            if(elem->value > next->value) {
-                swap(the_list, elem, next);
-                tmp = elem;
-                elem = next;
-                next = tmp;
+        
+        while(next && next->next ){
+            printf("elem = %d\n", elem->value);
+                printf("elem->next = %d\n", elem->next->value);
+                printf("next->next = %d\n", next->next->value);
+
+            if(elem->next->value > next->next->value)
+            {
+                printf("------\n");
+                swap(the_list, elem->next, next->next);
+                print(NULL, the_list);
             }
             next = next->next;
-            if(next == NULL)
-                break;
         }
         elem = elem->next;
     }
+    
     return the_list;
 }
 void swap(list_t *the_list, node_t *a, node_t *b)
 {
-    if( a == b)
+    if( a == b || a== NULL || b == NULL)
         return ;
-    node_t *a_prev=NULL, *b_prev=NULL, *elem_prev = NULL;
+  
+    node_t *a_prev=NULL, *b_prev=NULL;
     node_t *elem = the_list->head;
     int count = 0;
-    while(elem != NULL) {
-        if(elem == a ) {
-            a_prev = elem_prev;
-            count ++;
+    while(elem->next != NULL) {
+        if(elem->next == a ) {
+            a_prev = elem;
         }
-        if(elem == b) {
-            b_prev = elem_prev;
-            count ++;
+        if(elem->next == b) {
+            b_prev = elem;
         }
-        elem_prev = elem;
         elem = elem->next;
     }
     /* a or b is not in the list */
-    if(count < 2 )
+    if( a_prev == NULL || b_prev == NULL )
         return;
-    /*
+    
     elem = a_prev->next; 
     a_prev->next = b_prev->next;
     b_prev->next = elem;
@@ -112,9 +114,10 @@ void swap(list_t *the_list, node_t *a, node_t *b)
     elem = a ->next ; 
     a->next = b->next;
     b->next = elem;
-    */
+    
 
     /* consider whether a and b are adjacent*/
+    /* 
     if(a_prev != b) {
         if(a_prev == NULL)
             the_list->head = b;
@@ -139,6 +142,7 @@ void swap(list_t *the_list, node_t *a, node_t *b)
         b->next = elem;
     else
         b->next = a ;
+    */
 }
 list_t* quick_sort(list_t *the_list, int start, int end)
 {
