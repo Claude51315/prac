@@ -1,0 +1,97 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+AIR_ELEMENT	idx_stack.h	11;"	d
+COLS	main.c	12;"	d	file:
+COPY_COLOR	primitives.h	63;"	d
+COPY_OBJECT_FILL	primitives.h	47;"	d
+COPY_POINT3	primitives.h	58;"	d
+DECLARE_OBJECT	objects.h	18;"	d
+DECLARE_OBJECT	objects.h	4;"	d
+FUNC_BEGIN	objects.c	7;"	d	file:
+FUNC_END	objects.c	11;"	d	file:
+Kd	primitives.h	/^    double Kd; \/**< the diffuse component *\/$/;"	m	struct:__anon4
+Ks	primitives.h	/^    double Ks; \/**< the specular *\/$/;"	m	struct:__anon4
+MAX	raytracing.c	15;"	d	file:
+MAX_DISTANCE	raytracing.c	10;"	d	file:
+MAX_REFLECTION_BOUNCES	raytracing.c	9;"	d	file:
+MAX_STACK_SIZE	idx_stack.h	4;"	d
+MIN_DISTANCE	raytracing.c	11;"	d	file:
+OUT_FILENAME	main.c	9;"	d	file:
+R	primitives.h	/^    double R;  \/**< reflectance (effectiveness in reflecting)*\/$/;"	m	struct:__anon4
+ROWS	main.c	11;"	d	file:
+SAMPLES	raytracing.c	12;"	d	file:
+SET_COLOR	primitives.h	68;"	d
+SQUARE	raytracing.c	14;"	d	file:
+T	primitives.h	/^    double T;  \/**< transmittance (fraction of light passed per unit) *\/$/;"	m	struct:__anon4
+_RAY_IDX_STACK_H	idx_stack.h	2;"	d
+__RAYTRACING_H	raytracing.h	2;"	d
+__RAY_MATH_TOOLKIT_H	math-toolkit.h	2;"	d
+__RAY_OBJECTS_H	objects.h	2;"	d
+__RAY_PRIMITIVES_H	primitives.h	2;"	d
+add_vector	math-toolkit.h	/^void add_vector(const double *a, const double *b, double *out)$/;"	f
+calculateBasisVectors	raytracing.c	/^static void calculateBasisVectors(point3 u, point3 v, point3 w,$/;"	f	file:
+center	primitives.h	/^    point3 center;$/;"	m	struct:__anon5
+color	primitives.h	/^typedef double color[3];$/;"	t
+compute_specular_diffuse	raytracing.c	/^static void compute_specular_diffuse(double *diffuse,$/;"	f	file:
+cross_product	math-toolkit.h	/^void cross_product(const double *v1, const double *v2, double *out)$/;"	f
+data	idx_stack.h	/^    idx_stack_element data[MAX_STACK_SIZE];$/;"	m	struct:__anon2
+diff_in_second	main.c	/^static double diff_in_second(struct timespec t1, struct timespec t2)$/;"	f	file:
+dot_product	math-toolkit.h	/^double dot_product(const double *v1, const double *v2)$/;"	f
+fill_color	primitives.h	/^    color fill_color; \/**< RGB is in terms of 0.0 to 1.0 *\/$/;"	m	struct:__anon4
+fresnel	raytracing.c	/^static double fresnel(const point3 r, const point3 l,$/;"	f	file:
+idx	idx_stack.h	/^    double idx;$/;"	m	struct:__anon1
+idx_stack	idx_stack.h	/^} idx_stack;$/;"	t	typeref:struct:__anon2
+idx_stack_element	idx_stack.h	/^} idx_stack_element;$/;"	t	typeref:struct:__anon1
+idx_stack_empty	idx_stack.h	/^static inline int idx_stack_empty(idx_stack *stk)$/;"	f
+idx_stack_init	idx_stack.h	/^static inline void idx_stack_init(idx_stack *stk)$/;"	f
+idx_stack_pop	idx_stack.h	/^static inline idx_stack_element idx_stack_pop(idx_stack *stk)$/;"	f
+idx_stack_push	idx_stack.h	/^static inline void idx_stack_push(idx_stack *stk, idx_stack_element element)$/;"	f
+idx_stack_top	idx_stack.h	/^static inline idx_stack_element idx_stack_top(idx_stack *stk)$/;"	f
+index_of_refraction	primitives.h	/^    double index_of_refraction;$/;"	m	struct:__anon4
+intensity	primitives.h	/^    double intensity;$/;"	m	struct:__anon3
+intersection	primitives.h	/^} intersection;$/;"	t	typeref:struct:__anon8
+length	math-toolkit.h	/^double length(const double *v)$/;"	f
+light	primitives.h	/^} light;$/;"	t	typeref:struct:__anon3
+light_color	primitives.h	/^    color light_color; \/**< scale (0,1) *\/$/;"	m	struct:__anon3
+localColor	raytracing.c	/^static void localColor(color local_color,$/;"	f	file:
+main	main.c	/^int main()$/;"	f
+multiply_vector	math-toolkit.h	/^void multiply_vector(const double *a, double b, double *out)$/;"	f
+multiply_vectors	math-toolkit.h	/^void multiply_vectors(const double *a, const double *b, double *out)$/;"	f
+normal	primitives.h	/^    point3 normal;$/;"	m	struct:__anon6
+normal	primitives.h	/^    point3 normal;$/;"	m	struct:__anon8
+normalize	math-toolkit.h	/^void normalize(double *v)$/;"	f
+obj	idx_stack.h	/^    void *obj;$/;"	m	struct:__anon1
+object_fill	primitives.h	/^} object_fill;$/;"	t	typeref:struct:__anon4
+phong_power	primitives.h	/^    double phong_power; \/**< the Phong cosine power for highlights *\/$/;"	m	struct:__anon4
+point	primitives.h	/^    point3 point;$/;"	m	struct:__anon8
+point3	primitives.h	/^typedef double point3[3];$/;"	t
+point4	primitives.h	/^typedef double point4[3];$/;"	t
+position	primitives.h	/^    point3 position;$/;"	m	struct:__anon3
+protect_color_overflow	raytracing.c	/^static void protect_color_overflow(color c)$/;"	f	file:
+radius	primitives.h	/^    double radius;$/;"	m	struct:__anon5
+rayConstruction	raytracing.c	/^static void rayConstruction(point3 d, const point3 u, const point3 v,$/;"	f	file:
+rayRectangularIntersection	raytracing.c	/^static int rayRectangularIntersection(const point3 ray_e,$/;"	f	file:
+raySphereIntersection	raytracing.c	/^static int raySphereIntersection(const point3 ray_e,$/;"	f	file:
+ray_color	raytracing.c	/^static unsigned int ray_color(const point3 e, double t,$/;"	f	file:
+ray_hit_object	raytracing.c	/^static intersection ray_hit_object(const point3 e, const point3 d,$/;"	f	file:
+raytracing	raytracing.c	/^void raytracing(uint8_t *pixels, color background_color,$/;"	f
+rectangular	primitives.h	/^} rectangular;$/;"	t	typeref:struct:__anon6
+rectangular_fill	primitives.h	/^    object_fill rectangular_fill;$/;"	m	struct:__anon6
+reflection	raytracing.c	/^static void reflection(point3 r, const point3 d, const point3 n)$/;"	f	file:
+refraction	raytracing.c	/^static void refraction(point3 t, const point3 I, const point3 N,$/;"	f	file:
+scalar_triple	math-toolkit.h	/^double scalar_triple(const double *u, const double *v, const double *w)$/;"	f
+scalar_triple_product	math-toolkit.h	/^void scalar_triple_product(const double *u, const double *v, const double *w,$/;"	f
+sphere	primitives.h	/^} sphere;$/;"	t	typeref:struct:__anon5
+sphere_fill	primitives.h	/^    object_fill sphere_fill;$/;"	m	struct:__anon5
+subtract_vector	math-toolkit.h	/^void subtract_vector(const double *a, const double *b, double *out)$/;"	f
+top	idx_stack.h	/^    int top;$/;"	m	struct:__anon2
+vertices	primitives.h	/^    point3 vertices[4];$/;"	m	struct:__anon6
+viewpoint	primitives.h	/^} viewpoint;$/;"	t	typeref:struct:__anon7
+vpn	primitives.h	/^    point3 vpn;$/;"	m	struct:__anon7
+vrp	primitives.h	/^    point3 vrp;$/;"	m	struct:__anon7
+vup	primitives.h	/^    point3 vup;$/;"	m	struct:__anon7
+write_to_ppm	main.c	/^static void write_to_ppm(FILE *outfile, uint8_t *pixels,$/;"	f	file:
