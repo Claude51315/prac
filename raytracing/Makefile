@@ -6,10 +6,12 @@ CC ?= gcc
 CFLAGS = \
 	-std=gnu99 -Wall -O0 -g \
 	-mavx \
-	-fopenmp
+	-fopenmp \
+	-pthread
 LDFLAGS = \
 	-lm \
-	-lgomp
+	-lgomp \
+	-pthread
 ifeq ($(strip $(PROFILE)),1)
 PROF_FLAGS = -pg
 CFLAGS += $(PROF_FLAGS)

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include <omp.h>
-
+#include <pthread.h>
 #include "math-toolkit.h"
 #include "primitives.h"
 #include "raytracing.h"
@@ -466,19 +466,22 @@ typedef struct __DATA{
     int start_j, start_i, end_j, end_i;
 }r_data;
 
-void raytracing_thread(r_data data){
+#define NUM_THREAD (16)
+
+void* raytracing_thread(void *arg){
     
+    r_data *data = (r_data*)arg;
     point3 u, v, w, d;
     color object_color = { 0.0, 0.0, 0.0 };
 
     /* calculate u, v, w */
-    calculateBasisVectors(u, v, w, data.view);
+    calculateBasisVectors(u, v, w, data->view);
 
     idx_stack stk;
 
     int factor = sqrt(SAMPLES);
-    for (int j = data.start_j; j < data.end_j; j++) {
-        for (int i = data.start_i; i < data.end_i; i++) {
+    for (int j = data->start_j; j < data->end_j; j++) {
+        for (int i = data->start_i; i < data->end_i; i++) {
             double r = 0, g = 0, b = 0;
             /* MSAA */
             for (int s = 0; s < SAMPLES; s++) {
@@ -486,27 +489,27 @@ void raytracing_thread(r_data data){
                 rayConstruction(d, u, v, w,
                                 i * factor + s / factor,
                                 j * factor + s % factor,
-                                data.view,
-                                data.width * factor, data.height * factor);
-                if (ray_color(data.view->vrp, 0.0, d, &stk, data.rectangulars, data.spheres,
-                              data.lights, object_color,
+                                data->view,
+                                data->width * factor, data->height * factor);
+                if (ray_color(data->view->vrp, 0.0, d, &stk, data->rectangulars, data->spheres,
+                              data->lights, object_color,
                               MAX_REFLECTION_BOUNCES)) {
                     r += object_color[0];
                     g += object_color[1];
                     b += object_color[2];
                 } else {
-                    r += data.background_color[0];
-                    g += data.background_color[1];
-                    b += data.background_color[2];
+                    r += data->background_color[0];
+                    g += data->background_color[1];
+                    b += data->background_color[2];
                 }
-                data.pixels[((i + (j * data.width)) * 3) + 0] = r * 255 / SAMPLES;
-                data.pixels[((i + (j * data.width)) * 3) + 1] = g * 255 / SAMPLES;
-                data.pixels[((i + (j * data.width)) * 3) + 2] = b * 255 / SAMPLES;
+                data->pixels[((i + (j * data->width)) * 3) + 0] = r * 255 / SAMPLES;
+                data->pixels[((i + (j * data->width)) * 3) + 1] = g * 255 / SAMPLES;
+                data->pixels[((i + (j * data->width)) * 3) + 2] = b * 255 / SAMPLES;
             }
         }
     }
 
-
+    pthread_exit(0);
 }
 
 /* @param background_color this is not ambient light */
@@ -515,12 +518,36 @@ void raytracing(uint8_t *pixels, color background_color,
                 light_node lights, const viewpoint *view,
                 int width, int height)
 {
-    point3 u, v, w, d;
-    color object_color = { 0.0, 0.0, 0.0 };
+    pthread_t pids[NUM_THREAD];
+    r_data data[NUM_THREAD];
+    // initial data
+    for(int i = 0 ; i < NUM_THREAD ; i++){
+        data[i].pixels = pixels;
+        COPY_COLOR(data[i].background_color, background_color);
+        data[i].rectangulars = rectangulars;
+        data[i].spheres = spheres;
+        data[i].lights = lights;
+        data[i].view = view;
+        data[i].width = width;
+        data[i].height = height;
+        data[i].start_i = i * width/NUM_THREAD;
+        data[i].end_i = (i+1) * width/NUM_THREAD;
+        data[i].start_j = 0; 
+        data[i].end_j = height;
+    }
+    for(int i = 0 ; i < NUM_THREAD ; i++){
+        pthread_create(&pids[i], NULL, raytracing_thread, (void*)&data[i] );
+    }
+    for(int i = 0 ; i < NUM_THREAD ; i++){
+        pthread_join(pids[i], NULL);
+    }
+    
+    //point3 u, v, w, d;
+    //color object_color = { 0.0, 0.0, 0.0 };
 
     /* calculate u, v, w */
-    calculateBasisVectors(u, v, w, view);
-
+    //calculateBasisVectors(u, v, w, view);
+/*    
     idx_stack stk;
 
     int factor = sqrt(SAMPLES);
@@ -528,8 +555,9 @@ void raytracing(uint8_t *pixels, color background_color,
     for (int j = 0; j < height; j++) {
         for (int i = 0; i < width; i++) {
             double r = 0, g = 0, b = 0;
-            /* MSAA */
-            for (int s = 0; s < SAMPLES; s++) {
+  */
+    /* MSAA */
+    /*        for (int s = 0; s < SAMPLES; s++) {
                 idx_stack_init(&stk);
                 rayConstruction(d, u, v, w,
                                 i * factor + s / factor,
@@ -553,4 +581,5 @@ void raytracing(uint8_t *pixels, color background_color,
             }
         }
     }
+    */
 }
