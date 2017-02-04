@@ -454,6 +454,61 @@ static unsigned int ray_color(const point3 e, double t,
     return 1;
 }
 
+typedef struct __DATA{
+    uint8_t *pixels;
+    color background_color;
+    rectangular_node rectangulars;
+    sphere_node spheres;
+    light_node lights;
+    const viewpoint *view;
+    int width;
+    int height;
+    int start_j, start_i, end_j, end_i;
+}r_data;
+
+void raytracing_thread(r_data data){
+    
+    point3 u, v, w, d;
+    color object_color = { 0.0, 0.0, 0.0 };
+
+    /* calculate u, v, w */
+    calculateBasisVectors(u, v, w, data.view);
+
+    idx_stack stk;
+
+    int factor = sqrt(SAMPLES);
+    for (int j = data.start_j; j < data.end_j; j++) {
+        for (int i = data.start_i; i < data.end_i; i++) {
+            double r = 0, g = 0, b = 0;
+            /* MSAA */
+            for (int s = 0; s < SAMPLES; s++) {
+                idx_stack_init(&stk);
+                rayConstruction(d, u, v, w,
+                                i * factor + s / factor,
+                                j * factor + s % factor,
+                                data.view,
+                                data.width * factor, data.height * factor);
+                if (ray_color(data.view->vrp, 0.0, d, &stk, data.rectangulars, data.spheres,
+                              data.lights, object_color,
+                              MAX_REFLECTION_BOUNCES)) {
+                    r += object_color[0];
+                    g += object_color[1];
+                    b += object_color[2];
+                } else {
+                    r += data.background_color[0];
+                    g += data.background_color[1];
+                    b += data.background_color[2];
+                }
+                data.pixels[((i + (j * data.width)) * 3) + 0] = r * 255 / SAMPLES;
+                data.pixels[((i + (j * data.width)) * 3) + 1] = g * 255 / SAMPLES;
+                data.pixels[((i + (j * data.width)) * 3) + 2] = b * 255 / SAMPLES;
+            }
+        }
+    }
+
+
+}
+
 /* @param background_color this is not ambient light */
 void raytracing(uint8_t *pixels, color background_color,
                 rectangular_node rectangulars, sphere_node spheres,
