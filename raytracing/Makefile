@@ -5,10 +5,11 @@ all: $(EXEC)
 CC ?= gcc
 CFLAGS = \
 	-std=gnu99 -Wall -O0 -g \
-	-mavx
+	-mavx \
+	-fopenmp
 LDFLAGS = \
-	-lm
-
+	-lm \
+	-lgomp
 ifeq ($(strip $(PROFILE)),1)
 PROF_FLAGS = -pg
 CFLAGS += $(PROF_FLAGS)
