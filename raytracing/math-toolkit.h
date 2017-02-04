@@ -88,14 +88,10 @@ void cross_product(const double *v1, const double *v2, double *out)
 static inline
 double dot_product(const double *v1, const double *v2)
 {
-    double dp = 0.0;
+    //double dp = 0.0;
     //for (int i = 0; i < 3; i++)
     //    dp += v1[i] * v2[i];
-    dp += v1[0] * v2[0];
-    dp += v1[1] * v2[1];
-    dp += v1[2] * v2[2];
-    
-    return dp;
+    return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
 }
 
 static inline
