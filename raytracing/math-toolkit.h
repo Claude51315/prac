@@ -25,35 +25,46 @@ double length(const double *v)
 static inline
 void add_vector(const double *a, const double *b, double *out)
 {
-    for (int i = 0; i < 3; i++)
-        out[i] = a[i] + b[i];
+    //for (int i = 0; i < 3; i++)
+    //    out[i] = a[i] + b[i];
+    out[0] = a[0] + b[0];
+    out[1] = a[1] + b[1];
+    out[2] = a[2] + b[2];
+
 }
 
 static inline
 void subtract_vector(const double *a, const double *b, double *out)
 {
+    // original
     //for (int i = 0; i < 3; i++)
     //    out[i] = a[i] - b[i];
-   // __m256d A, B, C;
-
-    __m256d A  = _mm256_setr_pd(a[0], a[1], a[2], 0.0);
-    __m256d B  = _mm256_setr_pd(b[0], b[1], b[2], 0.0);
-    __m256d C = _mm256_sub_pd(A, B);    
-    double *re = (double*)&C;
-    out[0] = re[0];
-    out[1] = re[1];
-    out[2] = re[2];
-    //out[0] = a[0] - b[0];
-    //out[1] = a[1] - b[1];
-    //out[2] = a[2] - b[2];
     
+    // AVX
+    // __m256d A, B, C;
+    //__m256d A  = _mm256_setr_pd(a[0], a[1], a[2], 0.0);
+    //__m256d B  = _mm256_setr_pd(b[0], b[1], b[2], 0.0);
+    //__m256d C = _mm256_sub_pd(A, B);    
+    //double *re = (double*)&C;
+    //out[0] = re[0];
+    //out[1] = re[1];
+    //out[2] = re[2];
+    //loop unrolling
+    //
+    out[0] = a[0] - b[0];
+    out[1] = a[1] - b[1];
+    out[2] = a[2] - b[2];
 }
 
 static inline
 void multiply_vectors(const double *a, const double *b, double *out)
 {
-    for (int i = 0; i < 3; i++)
-        out[i] = a[i] * b[i];
+    //for (int i = 0; i < 3; i++)
+    //    out[i] = a[i] * b[i];
+    out[0] = a[0] * b[0];
+    out[1] = a[1] * b[1];
+    out[2] = a[2] * b[2];
+    
 }
 
 static inline

@@ -49,6 +49,9 @@ clean:
 	$(RM) $(EXEC) $(OBJS) *.png  use-models.h \
 		out.ppm gmon.out
 
+repeat: check
+	perf stat --repeat 10 -e cycles,branch-misses ./raytracing
+
 callgraph: check
 	gprof -b ./raytracing gmon.out | python gprof2dot.py | dot -Tpng -o output.png
 
